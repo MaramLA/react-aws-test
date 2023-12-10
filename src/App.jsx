@@ -1,17 +1,27 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import React, { useEffect, useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0);
-
+const App = () => {
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    try {
+      fetch("https://express-ecommerce-api-test-one.vercel.app/products")
+        .then((res) => res.json())
+        .then((data) => setProducts(data.payload));
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
   return (
     <div>
-      <h1>Welcome to react-aws-test</h1>
-      <h3>Creator: Maram Alfaraj</h3>
+      {products.length > 0 &&
+        products.map((product) => (
+          <article key={product._id}>
+            <h3>name: {product.name}</h3>
+            <p>price: {product.price}</p>
+          </article>
+        ))}
     </div>
   );
-}
+};
 
 export default App;
